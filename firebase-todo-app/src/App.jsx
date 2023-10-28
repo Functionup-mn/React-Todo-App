@@ -7,10 +7,9 @@ import { db } from "./config/firebase";
 import ContactCard from "./components/ContactCard";
 import AddAndUpdateContact from "./components/AddAndUpdateContact";
 import useDiscloser from "./hooks/useDiscloser";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import NotFoundContact from "./components/NotFoundContact";
-
 
 function App() {
   const [contacts, setContacts] = useState([]);
@@ -21,7 +20,8 @@ function App() {
       try {
         const contactsRef = collection(db, "contacts");
 
-        onSnapshot(contactsRef, (snapshot) => {      // we can directly display the items through onsnapshot without refreshing
+        onSnapshot(contactsRef, (snapshot) => {
+          // we can directly display the items through onsnapshot without refreshing
           const contactLists = snapshot.docs.map((doc) => {
             return {
               id: doc.id,
@@ -39,24 +39,25 @@ function App() {
   }, []);
 
   const filterContats = (e) => {
-      const value = e.target.value
+    const value = e.target.value;
 
-      const contactRef = collection(db, 'contacts')
+    const contactRef = collection(db, "contacts");
 
-      onSnapshot(contactRef, (snapshot) => {
-        const contactLists = snapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...doc.data(),
-          }
-        });
-      
-        const filteredContacts = contactLists.filter(contact => 
-          contact.name.toLowerCase().includes(value.toLowerCase())
-  )
-       setContacts(filteredContacts)
-       return filteredContacts
-}) }
+    onSnapshot(contactRef, (snapshot) => {
+      const contactLists = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+
+      const filteredContacts = contactLists.filter((contact) =>
+        contact.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setContacts(filteredContacts);
+      return filteredContacts;
+    });
+  };
 
   return (
     <>
@@ -79,13 +80,17 @@ function App() {
           </div>
         </div>
         <div>
-          {contacts.length <= 0 ? <NotFoundContact/> : contacts.map((contact) => (
-            <ContactCard key={contact.id} contact={contact} />
-          ))}
+          {contacts.length <= 0 ? (
+            <NotFoundContact />
+          ) : (
+            contacts.map((contact) => (
+              <ContactCard key={contact.id} contact={contact} />
+            ))
+          )}
         </div>
       </div>
       <AddAndUpdateContact isOpen={isOpen} onClose={onClose} />
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 }
